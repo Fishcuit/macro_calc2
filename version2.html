@@ -44,7 +44,7 @@
         box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
       }
 
-      div {
+      .container div {
         margin-bottom: 20px;
       }
 
@@ -301,7 +301,6 @@
                   mealFat = fatIntake * 0.2; // 50% less fat
                 }
 
-
                 let row = mealPlanBody.insertRow();
                 let cell1 = row.insertCell();
                 let cell2 = row.insertCell();
@@ -313,8 +312,7 @@
                 cell3.innerHTML = mealCarbs.toFixed(0);
                 cell4.innerHTML = mealFat.toFixed(0);
               }
-            }
-            else if (mealCount === 4) {
+            } else if (mealCount === 4) {
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
                 let mealCarbs = carbohydrateIntake * 0.166;
@@ -325,7 +323,6 @@
                   mealFat = fatIntake * 0.15; // 50% less fat
                 }
 
-
                 let row = mealPlanBody.insertRow();
                 let cell1 = row.insertCell();
                 let cell2 = row.insertCell();
@@ -337,22 +334,21 @@
                 cell3.innerHTML = mealCarbs.toFixed(0);
                 cell4.innerHTML = mealFat.toFixed(0);
               }
-            }
-            else if (mealCount === 5) {
+            } else if (mealCount === 5) {
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
                 let mealCarbs = carbohydrateIntake * 0.133;
                 let mealFat = fatIntake * 0.266;
                 // Adjust for pre-workout meal
                 if (i === preWorkoutMealIndex) {
-                  mealCarbs = carbohydrateIntake * 0.30; 
-                  mealFat = fatIntake * 0.10; 
+                  mealCarbs = carbohydrateIntake * 0.3;
+                  mealFat = fatIntake * 0.1;
                 }
                 //Adjust for post-workout meal
 
                 if (i === postWorkoutMealIndex) {
-                  mealCarbs = carbohydrateIntake * 0.30; 
-                  mealFat = fatIntake * 0.10; 
+                  mealCarbs = carbohydrateIntake * 0.3;
+                  mealFat = fatIntake * 0.1;
                 }
 
                 let row = mealPlanBody.insertRow();
@@ -450,194 +446,201 @@
     </script>
   </head>
   <body>
-    <form>
-      <div class="gender-form">
-        <label for="gender">Gender:</label>
-        <input type="radio" id="male" name="gender" value="male" />
-        <label for="male">Male</label>
-        <input type="radio" id="female" name="gender" value="female" />
-        <label for="female">Female</label>
-      </div>
-
-      <div>
-        <label for="age">Age:</label>
-        <input type="number" id="age" required />
-      </div>
-
-      <div>
-        <label for="weight">Weight:</label>
-        <input type="number" id="weight" required />
-        <div class="weight-radio">
-          <input type="radio" id="kg" name="weight-unit" value="kg" checked />
-          <label for="kg">kg</label>
-          <input type="radio" id="lbs" name="weight-unit" value="lbs" />
-          <label for="lbs">lbs</label>
+    <div class="container">
+      <h1>Macro Calculator</h1>
+      <form>
+        <div class="gender-form">
+          <label for="gender">Gender: </label>
+          <input type="radio" id="male" name="gender" value="male" />
+          <label for="male">Male </label>
+          <input type="radio" id="female" name="gender" value="female" />
+          <label for="female">Female</label>
         </div>
-      </div>
 
-      <div>
-        <label for="height">Height:</label>
-        <input type="number" id="height" required />
-        <div class="height-radio">
-          <input type="radio" id="cm" name="height-unit" value="cm" checked />
-          <label for="cm">cm</label>
-          <input type="radio" id="inches" name="height-unit" value="inches" />
-          <label for="inches">inches</label>
+        <div>
+          <label for="age">Age:</label>
+          <input type="number" id="age" required />
         </div>
-      </div>
 
-      <div>
-        <label for="activity-level">Activity Level:</label>
-        <select id="activity-level">
-          <option value="1.2">Sedentary (little or no exercise)</option>
-          <option value="1.375">
-            Lightly active (light exercise/sports 1-3 days/week)
-          </option>
-          <option value="1.55">
-            Moderately active (moderate exercise/sports 3-5 days/week)
-          </option>
-          <option value="1.725">
-            Very active (hard exercise/sports 6-7 days a week)
-          </option>
-          <option value="1.9">
-            Super active (very hard exercise/sports & physical job or 2x
-            training)
-          </option>
-        </select>
-      </div>
+        <div>
+          <label for="weight">Weight:</label>
+          <input type="number" id="weight" required />
+          <div class="weight-radio">
+            <input type="radio" id="kg" name="weight-unit" value="kg" checked />
+            <label for="kg">kg </label>
+            <input type="radio" id="lbs" name="weight-unit" value="lbs" />
+            <label for="lbs">lbs</label>
+          </div>
+        </div>
 
-      <div>
-        <label for="breast-feeding">Currently Breastfeeding?</label>
-        <select id="breast-feeding">
-          <option value="1">No</option>
-          <option value="2">Yes</option>
-        </select>
-      </div>
+        <div>
+          <label for="height">Height:</label>
+          <input type="number" id="height" required />
+          <div class="height-radio">
+            <input type="radio" id="cm" name="height-unit" value="cm" checked />
+            <label for="cm">cm </label>
+            <input type="radio" id="inches" name="height-unit" value="inches" />
+            <label for="inches">inches</label>
+          </div>
+        </div>
 
-      <div>
-        <label for="goal">What is your goal?</label>
-        <select id="goal" onchange="toggleGoalOptions()">
-          <option value="lose-weight">Lose weight</option>
-          <option value="gain-mass">Gain mass</option>
-          <option value="maintenance" selected>
-            Maintenance (performance, body recomposition, improved health)
-          </option>
-        </select>
-      </div>
+        <div>
+          <label for="activity-level">Activity Level:</label>
+          <select id="activity-level">
+            <option value="1.2">Sedentary (little or no exercise)</option>
+            <option value="1.375">
+              Lightly active (light exercise/sports 1-3 days/week)
+            </option>
+            <option value="1.55">
+              Moderately active (moderate exercise/sports 3-5 days/week)
+            </option>
+            <option value="1.725">
+              Very active (hard exercise/sports 6-7 days a week)
+            </option>
+            <option value="1.9">
+              Super active (very hard exercise/sports & physical job or 2x
+              training)
+            </option>
+          </select>
+        </div>
 
-      <div id="deficit-container" style="display: none">
-        <label for="deficit">Deficit Level:</label>
-        <select id="deficit">
-          <option value="0.05">Small (5%)</option>
-          <option value="0.10" selected>Smaller (10%)</option>
-          <option value="0.15">Moderate (15%)</option>
-        </select>
-      </div>
+        <div>
+          <label for="breast-feeding">Currently Breastfeeding?</label>
+          <select id="breast-feeding">
+            <option value="1">No</option>
+            <option value="2">Yes</option>
+          </select>
+        </div>
 
-      <div id="surplus-container" style="display: none">
-        <label for="surplus">Surplus Level:</label>
-        <select id="surplus">
-          <option value="0.15">Small (15%)</option>
-          <option value="0.20" selected>Moderate (20%)</option>
-          <option value="0.30">Large (30%)</option>
-        </select>
-      </div>
-      <div>
+        <div>
+          <label for="goal">What is your goal?</label>
+          <select id="goal" onchange="toggleGoalOptions()">
+            <option value="lose-weight">Lose weight</option>
+            <option value="gain-mass">Gain mass</option>
+            <option value="maintenance" selected>
+              Maintenance (performance, body recomposition, improved health)
+            </option>
+          </select>
+        </div>
+
+        <div id="deficit-container" style="display: none">
+          <label for="deficit">Deficit Level:</label>
+          <select id="deficit">
+            <option value="0.05">Small (5%)</option>
+            <option value="0.10" selected>Smaller (10%)</option>
+            <option value="0.15">Moderate (15%)</option>
+          </select>
+        </div>
+
+        <div id="surplus-container" style="display: none">
+          <label for="surplus">Surplus Level:</label>
+          <select id="surplus">
+            <option value="0.15">Small (15%)</option>
+            <option value="0.20" selected>Moderate (20%)</option>
+            <option value="0.30">Large (30%)</option>
+          </select>
+        </div>
+        <div>
+          <button
+            id="advanced-options-button"
+            type="button"
+            onclick="toggleAdvancedOptions()"
+          >
+            Advanced Options ⬇️
+          </button>
+          <div id="advanced-options" style="display: none">
+            <div>
+              <label for="meal-count"
+                >How many meals do you want to eat per day?</label
+              >
+              <select id="meal-count">
+                <option value="Select" selected>Select</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div id="workout-time-container" style="display: none">
+              <label for="workout-time">Time of day to workout?</label>
+              <select id="workout-time"></select>
+            </div>
+          </div>
+        </div>
+
         <button
-          id="advanced-options-button"
+          id="calculate-button"
           type="button"
-          onclick="toggleAdvancedOptions()"
+          onclick="calculateCalories()"
         >
-          Advanced Options ⬇️
+          Calculate
         </button>
-        <div id="advanced-options" style="display: none">
-          <div>
-            <label for="meal-count"
-              >How many meals do you want to eat per day?</label
-            >
-            <select id="meal-count">
-              <option value="Select" selected>Select</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
+      </form>
+
+      <div id="result">
+        <div id="macro-row">
+          <div class="result-box" id="calories-container">
+            <h3>Your daily calorie recommendations</h3>
+            <div id="daily-calories"></div>
           </div>
-          <div id="workout-time-container" style="display: none">
-            <label for="workout-time">Time of day to workout?</label>
-            <select id="workout-time"></select>
+          <div class="result-box" id="protein-container">
+            <h3>Protein</h3>
+            <div id="protein-intake"></div>
+          </div>
+          <div class="result-box" id="carb-container">
+            <h3>Carbohydrates</h3>
+            <div id="carb-intake"></div>
+          </div>
+          <div class="result-box" id="fat-container">
+            <h3>Fats</h3>
+            <div id="fat-intake"></div>
           </div>
         </div>
       </div>
 
-      <button id="calculate-button" type="button" onclick="calculateCalories()">
-        Calculate
-      </button>
-    </form>
-
-    <div id="result">
-      <div id="macro-row">
-        <div class="result-box" id="calories-container">
-          <h3>Your daily calorie recommendations</h3>
-          <div id="daily-calories"></div>
-        </div>
-        <div class="result-box" id="protein-container">
-          <h3>Protein</h3>
-          <div id="protein-intake"></div>
-        </div>
-        <div class="result-box" id="carb-container">
-          <h3>Carbohydrates</h3>
-          <div id="carb-intake"></div>
-        </div>
-        <div class="result-box" id="fat-container">
-          <h3>Fats</h3>
-          <div id="fat-intake"></div>
-        </div>
+      <div id="protein-slider-container">
+        <label for="protein-slider">Protein:</label>
+        <input
+          type="range"
+          id="protein-slider"
+          min="1.8"
+          max="2.2"
+          step="0.1"
+          value="2"
+          oninput="adjustMacronutrients()"
+        />
+        <span id="protein-slider-mult">2 g/kg of bodyweight</span>
       </div>
-    </div>
 
-    <div id="protein-slider-container">
-      <label for="protein-slider">Protein:</label>
-      <input
-        type="range"
-        id="protein-slider"
-        min="1.8"
-        max="2.2"
-        step="0.1"
-        value="2"
-        oninput="adjustMacronutrients()"
-      />
-      <span id="protein-slider-mult">2 g/kg of bodyweight</span>
-    </div>
+      <div id="carbohydrate-slider-container">
+        <label for="carbohydrate-slider"
+          >Fat: <span id="slider-value">50%</span></label
+        >
 
-    <div id="carbohydrate-slider-container">
-      <label for="carbohydrate-slider"
-        >Fat: <span id="slider-value">50%</span></label
-      >
-
-      <input
-        type="range"
-        id="carbohydrate-slider"
-        min="0"
-        max="100"
-        value="50"
-        oninput="adjustMacronutrients()"
-      />
-      <label for="carbohydrate-slider"
-        >Carbohydrates: <span id="slider-value1">50%</span></label
-      >
+        <input
+          type="range"
+          id="carbohydrate-slider"
+          min="0"
+          max="100"
+          value="50"
+          oninput="adjustMacronutrients()"
+        />
+        <label for="carbohydrate-slider"
+          >Carbohydrates: <span id="slider-value1">50%</span></label
+        >
+      </div>
+      <table id="meal-plan" style="display: none">
+        <thead>
+          <tr>
+            <th>Meal</th>
+            <th>Protein (g)</th>
+            <th>Carbs (g)</th>
+            <th>Fat (g)</th>
+          </tr>
+        </thead>
+        <tbody id="meal-plan-body">
+          <!-- JavaScript will fill this in -->
+        </tbody>
+      </table>
     </div>
-    <table id="meal-plan" style="display: none">
-      <thead>
-        <tr>
-          <th>Meal</th>
-          <th>Protein (g)</th>
-          <th>Carbs (g)</th>
-          <th>Fat (g)</th>
-        </tr>
-      </thead>
-      <tbody id="meal-plan-body">
-        <!-- JavaScript will fill this in -->
-      </tbody>
-    </table>
   </body>
 </html>
