@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BIN</title>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -88,6 +87,24 @@
         box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
         text-align: center;
         font-size: 1.5em;
+        display: none;
+      }
+      #result-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .result-box {
+        background-color: #f0f0f0;
+        padding: 0px 20px;
+
+        border-radius: 5px;
+      }
+      #macro-row {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 20px;
       }
 
       #meal-plan-body tr:last-child td {
@@ -166,7 +183,7 @@
           surplusContainer.style.display = "none";
         }
       }
-      
+
       function calculateCalories() {
         var gender = document.querySelector(
           'input[name="gender"]:checked'
@@ -234,22 +251,16 @@
             carbohydrateIntake = carbohydrateIntake + 30;
           }
 
-          resultContainer.innerHTML =
-            "Your recommended daily calories are: " +
-            dailyCalories.toFixed(0) +
-            " calories.<br>";
-          resultContainer.innerHTML +=
-            "Your recommended daily protein intake is: " +
-            proteinIntake.toFixed(0) +
-            " grams.<br>";
-          resultContainer.innerHTML +=
-            "Your recommended daily fat intake is: " +
-            fatIntake.toFixed(0) +
-            " grams.<br>";
-          resultContainer.innerHTML +=
-            "Your recommended daily carbohydrate intake is: " +
-            carbohydrateIntake.toFixed(0) +
-            " grams.";
+          document.getElementById("daily-calories").innerHTML =
+            dailyCalories.toFixed(0) + " calories";
+          document.getElementById("protein-intake").innerHTML =
+            proteinIntake.toFixed(0) + " grams";
+          document.getElementById("carb-intake").innerHTML =
+            carbohydrateIntake.toFixed(0) + " grams";
+          document.getElementById("fat-intake").innerHTML =
+            fatIntake.toFixed(0) + " grams";
+
+          resultContainer.style.display = "block";
 
           var workoutTime = document.getElementById("workout-time").value;
 
@@ -258,17 +269,17 @@
           var mealPlanTable = document.getElementById("meal-plan");
 
           if (mealCountElement) {
-            var mealCount = parseInt(mealCountElement.value);
-            var proteinPerMeal = proteinIntake / mealCount;
-            var carbPerMeal = carbohydrateIntake / mealCount;
-            var fatPerMeal = fatIntake / mealCount;
+            let mealCount = parseInt(mealCountElement.value);
+            let proteinPerMeal = proteinIntake / mealCount;
+            let carbPerMeal = carbohydrateIntake / mealCount;
+            let fatPerMeal = fatIntake / mealCount;
             // Find pre-workout and post-workout meal index based on the workout time value.
-            var preWorkoutMealIndex, postWorkoutMealIndex;
+            let preWorkoutMealIndex, postWorkoutMealIndex;
             if (workoutTime === "Before meal 1") {
               preWorkoutMealIndex = -1; // Indicates no pre-workout meal adjustment needed.
               postWorkoutMealIndex = 0; // Post-workout meal is the first meal.
             } else {
-              var match = workoutTime.match(/Between meal (\d+)/);
+              let match = workoutTime.match(/Between meal (\d+)/);
               if (match) {
                 preWorkoutMealIndex = parseInt(match[1]); // Remember, we are zero-indexing.
                 postWorkoutMealIndex = preWorkoutMealIndex + 1;
@@ -279,33 +290,82 @@
             mealPlanBody.innerHTML = "";
 
             // fill in the meal plan
-            for (var i = 1; i <= mealCount; i++) {
-              var mealProtein = proteinPerMeal;
-              var mealCarbs = carbPerMeal;
-              var mealFat = fatPerMeal;
-              // Adjust for pre-workout meal
-              if (i === preWorkoutMealIndex) {
-                mealCarbs *= 1; // 50% more carbs
-                carbPerMeal =
-                  (carbohydrateIntake - mealCarbs) / (mealCount - 1); // Recalculate carbs for the rest of the meals
-              }
-              // Adjust for post-workout meal
-              if (i === postWorkoutMealIndex) {
-                mealProtein *= 1; // 50% more protein
-                proteinPerMeal =
-                  (proteinIntake - mealProtein) / (mealCount - 1); // Recalculate protein for the rest of the meals
-              }
+            if (mealCount === 3) {
+              for (var i = 1; i <= mealCount; i++) {
+                let mealProtein = proteinPerMeal;
+                let mealCarbs = carbohydrateIntake * 0.25;
+                let mealFat = fatIntake * 0.4;
+                // Adjust for pre-workout meal
+                if (i === preWorkoutMealIndex) {
+                  mealCarbs = carbohydrateIntake * 0.5; // 50% more carbs
+                  mealFat = fatIntake * 0.2; // 50% less fat
+                }
 
-              var row = mealPlanBody.insertRow();
-              var cell1 = row.insertCell();
-              var cell2 = row.insertCell();
-              var cell3 = row.insertCell();
-              var cell4 = row.insertCell();
 
-              cell1.innerHTML = i;
-              cell2.innerHTML = mealProtein.toFixed(2);
-              cell3.innerHTML = mealCarbs.toFixed(2);
-              cell4.innerHTML = mealFat.toFixed(2);
+                let row = mealPlanBody.insertRow();
+                let cell1 = row.insertCell();
+                let cell2 = row.insertCell();
+                let cell3 = row.insertCell();
+                let cell4 = row.insertCell();
+
+                cell1.innerHTML = i;
+                cell2.innerHTML = mealProtein.toFixed(0);
+                cell3.innerHTML = mealCarbs.toFixed(0);
+                cell4.innerHTML = mealFat.toFixed(0);
+              }
+            }
+            else if (mealCount === 4) {
+              for (var i = 1; i <= mealCount; i++) {
+                let mealProtein = proteinPerMeal;
+                let mealCarbs = carbohydrateIntake * 0.166;
+                let mealFat = fatIntake * 0.28;
+                // Adjust for pre-workout meal
+                if (i === preWorkoutMealIndex) {
+                  mealCarbs = carbohydrateIntake * 0.5; // 50% carbs
+                  mealFat = fatIntake * 0.15; // 50% less fat
+                }
+
+
+                let row = mealPlanBody.insertRow();
+                let cell1 = row.insertCell();
+                let cell2 = row.insertCell();
+                let cell3 = row.insertCell();
+                let cell4 = row.insertCell();
+
+                cell1.innerHTML = i;
+                cell2.innerHTML = mealProtein.toFixed(0);
+                cell3.innerHTML = mealCarbs.toFixed(0);
+                cell4.innerHTML = mealFat.toFixed(0);
+              }
+            }
+            else if (mealCount === 5) {
+              for (var i = 1; i <= mealCount; i++) {
+                let mealProtein = proteinPerMeal;
+                let mealCarbs = carbohydrateIntake * 0.133;
+                let mealFat = fatIntake * 0.266;
+                // Adjust for pre-workout meal
+                if (i === preWorkoutMealIndex) {
+                  mealCarbs = carbohydrateIntake * 0.30; 
+                  mealFat = fatIntake * 0.10; 
+                }
+                //Adjust for post-workout meal
+
+                if (i === postWorkoutMealIndex) {
+                  mealCarbs = carbohydrateIntake * 0.30; 
+                  mealFat = fatIntake * 0.10; 
+                }
+
+                let row = mealPlanBody.insertRow();
+                let cell1 = row.insertCell();
+                let cell2 = row.insertCell();
+                let cell3 = row.insertCell();
+                let cell4 = row.insertCell();
+
+                cell1.innerHTML = i;
+                cell2.innerHTML = mealProtein.toFixed(0);
+                cell3.innerHTML = mealCarbs.toFixed(0);
+                cell4.innerHTML = mealFat.toFixed(0);
+              }
             }
 
             mealPlanTable.style.display = "table"; // make the table visible
@@ -390,8 +450,6 @@
     </script>
   </head>
   <body>
-    <h1>Calorie Calculator</h1>
-
     <form>
       <div class="gender-form">
         <label for="gender">Gender:</label>
@@ -409,7 +467,7 @@
       <div>
         <label for="weight">Weight:</label>
         <input type="number" id="weight" required />
-        <div class = "weight-radio">
+        <div class="weight-radio">
           <input type="radio" id="kg" name="weight-unit" value="kg" checked />
           <label for="kg">kg</label>
           <input type="radio" id="lbs" name="weight-unit" value="lbs" />
@@ -420,8 +478,7 @@
       <div>
         <label for="height">Height:</label>
         <input type="number" id="height" required />
-        <div class = "height-radio">
-
+        <div class="height-radio">
           <input type="radio" id="cm" name="height-unit" value="cm" checked />
           <label for="cm">cm</label>
           <input type="radio" id="inches" name="height-unit" value="inches" />
@@ -462,10 +519,11 @@
         <select id="goal" onchange="toggleGoalOptions()">
           <option value="lose-weight">Lose weight</option>
           <option value="gain-mass">Gain mass</option>
-          <option value="maintenance" selected>Maintenance (performance, body recomposition, improved health)</option>
+          <option value="maintenance" selected>
+            Maintenance (performance, body recomposition, improved health)
+          </option>
         </select>
       </div>
-      
 
       <div id="deficit-container" style="display: none">
         <label for="deficit">Deficit Level:</label>
@@ -516,7 +574,26 @@
       </button>
     </form>
 
-    <div id="result"></div>
+    <div id="result">
+      <div id="macro-row">
+        <div class="result-box" id="calories-container">
+          <h3>Your daily calorie recommendations</h3>
+          <div id="daily-calories"></div>
+        </div>
+        <div class="result-box" id="protein-container">
+          <h3>Protein</h3>
+          <div id="protein-intake"></div>
+        </div>
+        <div class="result-box" id="carb-container">
+          <h3>Carbohydrates</h3>
+          <div id="carb-intake"></div>
+        </div>
+        <div class="result-box" id="fat-container">
+          <h3>Fats</h3>
+          <div id="fat-intake"></div>
+        </div>
+      </div>
+    </div>
 
     <div id="protein-slider-container">
       <label for="protein-slider">Protein:</label>
@@ -533,8 +610,10 @@
     </div>
 
     <div id="carbohydrate-slider-container">
-      <label for="carbohydrate-slider">Fat:</label>
-      <span id="slider-value">50%</span>
+      <label for="carbohydrate-slider"
+        >Fat: <span id="slider-value">50%</span></label
+      >
+
       <input
         type="range"
         id="carbohydrate-slider"
@@ -543,8 +622,9 @@
         value="50"
         oninput="adjustMacronutrients()"
       />
-      <label for="carbohydrate-slider">:Carbohydrates</label>
-      <span id="slider-value1">50%</span>
+      <label for="carbohydrate-slider"
+        >Carbohydrates: <span id="slider-value1">50%</span></label
+      >
     </div>
     <table id="meal-plan" style="display: none">
       <thead>
