@@ -270,20 +270,32 @@
 
           if (mealCountElement) {
             let mealCount = parseInt(mealCountElement.value);
-            let proteinPerMeal = proteinIntake / mealCount;
-            let carbPerMeal = carbohydrateIntake / mealCount;
-            let fatPerMeal = fatIntake / mealCount;
+            let proteinPerMeal = (proteinIntake * 0.8) / mealCount;
+            let carbPerMeal = (carbohydrateIntake * 0.8) / mealCount;
+            let fatPerMeal = (fatIntake * 0.8) / mealCount;
+            let snackProtein = proteinIntake * 0.2;
+            let snackCarb = carbohydrateIntake * 0.2;
+            let snackFat = fatIntake * 0.2;
             // Find pre-workout and post-workout meal index based on the workout time value.
             let preWorkoutMealIndex, postWorkoutMealIndex;
-            if (workoutTime === "Before meal 1") {
-              preWorkoutMealIndex = -1; // Indicates no pre-workout meal adjustment needed.
-              postWorkoutMealIndex = 0; // Post-workout meal is the first meal.
-            } else {
-              let match = workoutTime.match(/Between meal (\d+)/);
-              if (match) {
-                preWorkoutMealIndex = parseInt(match[1]); // Remember, we are zero-indexing.
+
+            switch (workoutTime) {
+              case "AM":
+                preWorkoutMealIndex = 1; // No pre-workout meal
+                postWorkoutMealIndex = 2; // First meal is post-workout
+                break;
+              case "NOON":
+                preWorkoutMealIndex = 2; // First meal is pre-workout
+                postWorkoutMealIndex = 3; // Second meal is post-workout
+                break;
+              case "PM":
+                if (mealCount === 4) {
+                  preWorkoutMealIndex = 4; // Fourth meal is pre-workout for a 4-meal day
+                } else {
+                  preWorkoutMealIndex = 3; // Second meal is pre-workout
+                }
                 postWorkoutMealIndex = preWorkoutMealIndex + 1;
-              }
+                break;
             }
 
             // clear existing meal plan
@@ -293,12 +305,12 @@
             if (mealCount === 3) {
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
-                let mealCarbs = carbohydrateIntake * 0.25;
-                let mealFat = fatIntake * 0.4;
+                let mealCarbs = carbohydrateIntake * 0.8 * 0.25;
+                let mealFat = fatIntake * 0.8 * 0.4;
                 // Adjust for pre-workout meal
                 if (i === preWorkoutMealIndex) {
-                  mealCarbs = carbohydrateIntake * 0.5; // 50% more carbs
-                  mealFat = fatIntake * 0.2; // 50% less fat
+                  mealCarbs = carbohydrateIntake * 0.8 * 0.5; // 50% more carbs
+                  mealFat = fatIntake * 0.8 * 0.2; // 50% less fat
                 }
 
                 let row = mealPlanBody.insertRow();
@@ -315,12 +327,12 @@
             } else if (mealCount === 4) {
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
-                let mealCarbs = carbohydrateIntake * 0.166;
-                let mealFat = fatIntake * 0.28;
+                let mealCarbs = carbohydrateIntake * 0.8 * 0.166;
+                let mealFat = fatIntake * 0.8 * 0.28;
                 // Adjust for pre-workout meal
                 if (i === preWorkoutMealIndex) {
-                  mealCarbs = carbohydrateIntake * 0.5; // 50% carbs
-                  mealFat = fatIntake * 0.15; // 50% less fat
+                  mealCarbs = carbohydrateIntake * 0.8 * 0.5; // 50% carbs
+                  mealFat = fatIntake * 0.8 * 0.15; // 50% less fat
                 }
 
                 let row = mealPlanBody.insertRow();
@@ -337,18 +349,18 @@
             } else if (mealCount === 5) {
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
-                let mealCarbs = carbohydrateIntake * 0.133;
-                let mealFat = fatIntake * 0.266;
+                let mealCarbs = carbohydrateIntake * 0.8 * 0.133;
+                let mealFat = fatIntake * 0.8 * 0.266;
                 // Adjust for pre-workout meal
                 if (i === preWorkoutMealIndex) {
-                  mealCarbs = carbohydrateIntake * 0.3;
-                  mealFat = fatIntake * 0.1;
+                  mealCarbs = carbohydrateIntake * 0.8 * 0.3;
+                  mealFat = fatIntake * 0.8 * 0.1;
                 }
                 //Adjust for post-workout meal
 
                 if (i === postWorkoutMealIndex) {
-                  mealCarbs = carbohydrateIntake * 0.3;
-                  mealFat = fatIntake * 0.1;
+                  mealCarbs = carbohydrateIntake * 0.8 * 0.3;
+                  mealFat = fatIntake * 0.8 * 0.1;
                 }
 
                 let row = mealPlanBody.insertRow();
@@ -362,7 +374,17 @@
                 cell3.innerHTML = mealCarbs.toFixed(0);
                 cell4.innerHTML = mealFat.toFixed(0);
               }
+              // console.log(`Meal ${i} - Protein: ${mealProtein.toFixed(0)}, Carbs: ${mealCarbs.toFixed(0)}, Fat: ${mealFat.toFixed(0)}`);
             }
+            let snackRow = mealPlanBody.insertRow();
+            let snackCell1 = snackRow.insertCell();
+            let snackCell2 = snackRow.insertCell();
+            let snackCell3 = snackRow.insertCell();
+            let snackCell4 = snackRow.insertCell();
+            snackCell1.innerHTML = "Snack";
+            snackCell2.innerHTML = snackProtein.toFixed(0);
+            snackCell3.innerHTML = snackCarb.toFixed(0);
+            snackCell4.innerHTML = snackFat.toFixed(0);
 
             mealPlanTable.style.display = "table"; // make the table visible
           } else {
@@ -395,6 +417,13 @@
         proteinMultiplier = parseFloat(proteinSlider.value);
         carbohydratePercentage = parseFloat(carbohydrateSlider.value);
         fatPercentage = 100 - carbohydratePercentage; // Fat percentage is the remaining percentage
+        var fatWarningDiv = document.getElementById("fatWarning");
+
+        if (fatPercentage < 30) {
+          fatWarningDiv.style.display = "block"; // Show the warning div
+        } else {
+          fatWarningDiv.style.display = "none"; // Hide the warning div
+        }
         document.getElementById("slider-value").innerHTML =
           100 - carbohydratePercentage + "%";
         document.getElementById("slider-value1").innerHTML =
@@ -424,11 +453,11 @@
             }
 
             var mealCount = this.value;
-            var workoutTimes = [];
+            workoutTimes = ["AM", "NOON", "PM"];
 
-            for (var i = 1; i < mealCount; i++) {
-              workoutTimes.push("Between meal " + i + " and meal " + (i + 1));
-            }
+            // for (var i = 1; i < mealCount; i++) {
+            //   workoutTimes.push("Between meal " + i + " and meal " + (i + 1));
+            // }
 
             // populate the workout-time select options
             for (var i = 0; i < workoutTimes.length; i++) {
@@ -627,6 +656,9 @@
         <label for="carbohydrate-slider"
           >Carbohydrates: <span id="slider-value1">50%</span></label
         >
+        <div id="fatWarning" style="display: none; color: red">
+          Going below 30% fats is not recommended!
+        </div>
       </div>
       <table id="meal-plan" style="display: none">
         <thead>
