@@ -289,12 +289,8 @@
                 postWorkoutMealIndex = 3; // Second meal is post-workout
                 break;
               case "PM":
-                if (mealCount === 4) {
-                  preWorkoutMealIndex = 4; // Fourth meal is pre-workout for a 4-meal day
-                } else {
-                  preWorkoutMealIndex = 3; // Second meal is pre-workout
-                }
-                postWorkoutMealIndex = preWorkoutMealIndex + 1;
+                preWorkoutMealIndex = 3; // Second meal is pre-workout
+                postWorkoutMealIndex = 4; // Third meal is post-workout
                 break;
             }
 
@@ -328,10 +324,15 @@
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
                 let mealCarbs = carbohydrateIntake * 0.8 * 0.166;
-                let mealFat = fatIntake * 0.8 * 0.28;
+                let mealFat = fatIntake * 0.8 * 0.35;
                 // Adjust for pre-workout meal
                 if (i === preWorkoutMealIndex) {
-                  mealCarbs = carbohydrateIntake * 0.8 * 0.5; // 50% carbs
+                  mealCarbs = carbohydrateIntake * 0.8 * 0.33; // 50% carbs
+                  mealFat = fatIntake * 0.8 * 0.15; // 50% less fat
+                }
+                //Adjust for post-workout meal
+                if (i === postWorkoutMealIndex) {
+                  mealCarbs = carbohydrateIntake * 0.8 * 0.33; // 50% carbs
                   mealFat = fatIntake * 0.8 * 0.15; // 50% less fat
                 }
 
