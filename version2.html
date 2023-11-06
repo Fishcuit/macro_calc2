@@ -15,13 +15,6 @@
         background-color: #f6f6f6;
       }
 
-      .app-title {
-        background-color: #424242;
-        color: #fff;
-        padding: 20px 0;
-        margin: 0;
-        text-align: center;
-      }
       .gender-form {
         display: flex;
         flex-direction: row;
@@ -44,7 +37,7 @@
         box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
       }
 
-      .container div {
+      .macro-form div {
         margin-bottom: 20px;
       }
 
@@ -80,23 +73,25 @@
 
       #result {
         max-width: 600px;
+        height:auto;
         margin: 20px auto;
         padding: 20px;
         border-radius: 10px;
         background-color: #fff;
         box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
         text-align: center;
-        font-size: 1.5em;
+        font-size: 1em;
         display: none;
       }
       #result-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        margin-bottom: 20px;
       }
       .result-box {
         background-color: #f0f0f0;
-        padding: 0px 20px;
+        padding: 20px 20px;
 
         border-radius: 5px;
       }
@@ -105,6 +100,7 @@
         flex-direction: column;
         justify-content: space-between;
         margin-bottom: 20px;
+        gap: 20px;
       }
 
       #meal-plan-body tr:last-child td {
@@ -514,7 +510,6 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="app-title">Macro Calculator</h1>
       <form class="macro-form">
         <div class="gender-form">
           <label for="gender">Gender: </label>
@@ -580,7 +575,7 @@
         </div>
         <div>
           <label for="competitive-athlete"
-            >Are you a competitive endurance athlete?</label
+            >Are you a competitive endurance athlete in peak training?</label
           >
           <select id="competitive-athlete">
             <option value="1">No</option>
