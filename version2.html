@@ -15,7 +15,7 @@
         background-color: #f6f6f6;
       }
 
-      h1 {
+      .app-title {
         background-color: #424242;
         color: #fff;
         padding: 20px 0;
@@ -35,7 +35,7 @@
         flex-direction: row;
       }
 
-      form {
+      .macro-form {
         max-width: 600px;
         margin: 20px auto;
         padding: 20px;
@@ -190,6 +190,7 @@
         ).value;
         var age = parseInt(document.getElementById("age").value);
         var bf = parseInt(document.getElementById("breast-feeding").value);
+        var ca = parseInt(document.getElementById("competitive-athlete").value);
         var weight = parseFloat(document.getElementById("weight").value);
         var height = parseFloat(document.getElementById("height").value);
         var activityLevel = parseFloat(
@@ -246,6 +247,12 @@
 
           if (bf === 2) {
             dailyCalories = dailyCalories + 295;
+            proteinIntake = proteinIntake + 10;
+            fatIntake = fatIntake + 15;
+            carbohydrateIntake = carbohydrateIntake + 30;
+          }
+          if (ca === 2) {
+            dailyCalories = dailyCalories + 300;
             proteinIntake = proteinIntake + 10;
             fatIntake = fatIntake + 15;
             carbohydrateIntake = carbohydrateIntake + 30;
@@ -320,6 +327,15 @@
                 cell3.innerHTML = mealCarbs.toFixed(0);
                 cell4.innerHTML = mealFat.toFixed(0);
               }
+              let snackRow = mealPlanBody.insertRow();
+              let snackCell1 = snackRow.insertCell();
+              let snackCell2 = snackRow.insertCell();
+              let snackCell3 = snackRow.insertCell();
+              let snackCell4 = snackRow.insertCell();
+              snackCell1.innerHTML = "Snack";
+              snackCell2.innerHTML = snackProtein.toFixed(0);
+              snackCell3.innerHTML = snackCarb.toFixed(0);
+              snackCell4.innerHTML = snackFat.toFixed(0);
             } else if (mealCount === 4) {
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
@@ -347,6 +363,15 @@
                 cell3.innerHTML = mealCarbs.toFixed(0);
                 cell4.innerHTML = mealFat.toFixed(0);
               }
+              let snackRow = mealPlanBody.insertRow();
+              let snackCell1 = snackRow.insertCell();
+              let snackCell2 = snackRow.insertCell();
+              let snackCell3 = snackRow.insertCell();
+              let snackCell4 = snackRow.insertCell();
+              snackCell1.innerHTML = "Snack";
+              snackCell2.innerHTML = snackProtein.toFixed(0);
+              snackCell3.innerHTML = snackCarb.toFixed(0);
+              snackCell4.innerHTML = snackFat.toFixed(0);
             } else if (mealCount === 5) {
               for (var i = 1; i <= mealCount; i++) {
                 let mealProtein = proteinPerMeal;
@@ -375,19 +400,19 @@
                 cell3.innerHTML = mealCarbs.toFixed(0);
                 cell4.innerHTML = mealFat.toFixed(0);
               }
+              let snackRow = mealPlanBody.insertRow();
+              let snackCell1 = snackRow.insertCell();
+              let snackCell2 = snackRow.insertCell();
+              let snackCell3 = snackRow.insertCell();
+              let snackCell4 = snackRow.insertCell();
+              snackCell1.innerHTML = "Snack";
+              snackCell2.innerHTML = snackProtein.toFixed(0);
+              snackCell3.innerHTML = snackCarb.toFixed(0);
+              snackCell4.innerHTML = snackFat.toFixed(0);
               // console.log(`Meal ${i} - Protein: ${mealProtein.toFixed(0)}, Carbs: ${mealCarbs.toFixed(0)}, Fat: ${mealFat.toFixed(0)}`);
             }
-            let snackRow = mealPlanBody.insertRow();
-            let snackCell1 = snackRow.insertCell();
-            let snackCell2 = snackRow.insertCell();
-            let snackCell3 = snackRow.insertCell();
-            let snackCell4 = snackRow.insertCell();
-            snackCell1.innerHTML = "Snack";
-            snackCell2.innerHTML = snackProtein.toFixed(0);
-            snackCell3.innerHTML = snackCarb.toFixed(0);
-            snackCell4.innerHTML = snackFat.toFixed(0);
 
-            mealPlanTable.style.display = "table"; // make the table visible
+            
           } else {
             mealPlanTable.style.display = "none"; // hide the table
           }
@@ -419,11 +444,17 @@
         carbohydratePercentage = parseFloat(carbohydrateSlider.value);
         fatPercentage = 100 - carbohydratePercentage; // Fat percentage is the remaining percentage
         var fatWarningDiv = document.getElementById("fatWarning");
+        var carbWarningDiv = document.getElementById("carbWarning");
 
         if (fatPercentage < 30) {
           fatWarningDiv.style.display = "block"; // Show the warning div
         } else {
           fatWarningDiv.style.display = "none"; // Hide the warning div
+        }
+        if (carbohydratePercentage < 30) {
+          carbWarningDiv.style.display = "block"; // Show the warning div
+        } else {
+          carbWarningDiv.style.display = "none"; // Hide the warning div
         }
         document.getElementById("slider-value").innerHTML =
           100 - carbohydratePercentage + "%";
@@ -436,13 +467,19 @@
       function toggleAdvancedOptions() {
         var advancedOptionsContainer =
           document.getElementById("advanced-options");
+        var mealPlanTable = document.getElementById("meal-plan");
 
         if (advancedOptionsContainer.style.display === "none") {
           advancedOptionsContainer.style.display = "block";
+          mealPlanTable.style.display = "table"; // Show the table when advanced options are shown
         } else {
           advancedOptionsContainer.style.display = "none";
+          mealPlanTable.style.display = "none"; // Hide the table when advanced options are hidden
         }
+
+        // Other code as necessary...
       }
+
       window.onload = function () {
         document
           .getElementById("meal-count")
@@ -477,8 +514,8 @@
   </head>
   <body>
     <div class="container">
-      <h1>Macro Calculator</h1>
-      <form>
+      <h1 class="app-title">Macro Calculator</h1>
+      <form class="macro-form">
         <div class="gender-form">
           <label for="gender">Gender: </label>
           <input type="radio" id="male" name="gender" value="male" />
@@ -537,6 +574,15 @@
         <div>
           <label for="breast-feeding">Currently Breastfeeding?</label>
           <select id="breast-feeding">
+            <option value="1">No</option>
+            <option value="2">Yes</option>
+          </select>
+        </div>
+        <div>
+          <label for="competitive-athlete"
+            >Are you a competitive endurance athlete?</label
+          >
+          <select id="competitive-athlete">
             <option value="1">No</option>
             <option value="2">Yes</option>
           </select>
@@ -658,7 +704,11 @@
           >Carbohydrates: <span id="slider-value1">50%</span></label
         >
         <div id="fatWarning" style="display: none; color: red">
-          Going below 30% fats is not recommended!
+          Going below 30% fats is not recommended.
+        </div>
+        <div id="carbWarning" style="display: none; color: red">
+          Going below 30% carbohydrates is not recommended by Black Iron
+          Nutrition.
         </div>
       </div>
       <table id="meal-plan" style="display: none">
@@ -670,9 +720,7 @@
             <th>Fat (g)</th>
           </tr>
         </thead>
-        <tbody id="meal-plan-body">
-          <!-- JavaScript will fill this in -->
-        </tbody>
+        <tbody id="meal-plan-body"></tbody>
       </table>
     </div>
   </body>
