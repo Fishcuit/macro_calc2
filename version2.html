@@ -15,6 +15,26 @@
         background-color: #f6f6f6;
       }
 
+      #emailModal {
+        display: none; /* Start hidden, display it when needed */
+        text-align: center; /* Center the content inside the modal */
+        padding: 20px;
+        background-color: white; /* Background of the email modal */
+        margin: 0 auto; /* Optionally center the modal content if it doesn't fill the width */
+
+        /* Remove properties related to full-screen positioning */
+      }
+
+      #emailModalContent {
+        padding: 20px;
+        background-color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        /* Add additional styling as needed */
+      }
+
       .gender-form {
         display: flex;
         flex-direction: row;
@@ -43,7 +63,7 @@
 
       label {
         display: inline-block;
-       
+
         margin-right: 5px;
       }
 
@@ -74,7 +94,7 @@
 
       #result {
         max-width: 600px;
-        height:auto;
+        height: auto;
         margin: 20px auto;
         padding: 20px;
         border-radius: 10px;
@@ -180,8 +200,39 @@
           surplusContainer.style.display = "none";
         }
       }
+      function submitEmail() {
+        var email = document.getElementById("emailInput").value;
+        var firstName = document.getElementById("firstNameInput").value;
+        var lastName = document.getElementById("lastNameInput").value;
+        // Basic validation for email and names
+        if (email && /\S+@\S+\.\S+/.test(email) && firstName && lastName) {
+          fetch("https://script.google.com/macros/s/AKfycbwjrG3nRcap6eNoj5oKxRl-hwIapkOfdkw77xPFi2-vS5dl5WdaTKzM2lo9wP9kYTGl/exec", {
+            method: "POST",
+            mode: "no-cors", // Important for CORS policy
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `email=${encodeURIComponent(
+              email
+            )}&firstName=${encodeURIComponent(
+              firstName
+            )}&lastName=${encodeURIComponent(lastName)}`,
+          })
+            .then((response) => {
+              console.log("Information saved");
+              // Hide the email modal here and show the results
+              document.getElementById("emailModal").style.display = "none";
+              document.getElementById("macro-row").style.display = "flex";
+              displayMacros(); // Assuming this function displays your macro calculations
+            })
+            .catch((error) => console.error("Error:", error));
+        } else {
+          alert("Please enter all required information.");
+        }
+      }
 
       function calculateCalories() {
+        document.getElementById("emailModal").style.display = "block"; // Hide email form
         var gender = document.querySelector(
           'input[name="gender"]:checked'
         ).value;
@@ -408,8 +459,6 @@
               snackCell4.innerHTML = snackFat.toFixed(0);
               // console.log(`Meal ${i} - Protein: ${mealProtein.toFixed(0)}, Carbs: ${mealCarbs.toFixed(0)}, Fat: ${mealFat.toFixed(0)}`);
             }
-
-            
           } else {
             mealPlanTable.style.display = "none"; // hide the table
           }
@@ -649,7 +698,8 @@
       </form>
 
       <div id="result">
-        <div id="macro-row">
+        <div id="macro-row" style="display: none">
+          <!-- Macro Results Here -->
           <div class="result-box" id="calories-container">
             <h3>Your daily calorie recommendations</h3>
             <div id="daily-calories"></div>
@@ -665,6 +715,15 @@
           <div class="result-box" id="fat-container">
             <h3>Fats</h3>
             <div id="fat-intake"></div>
+          </div>
+        </div>
+        <div id="emailModal">
+          <div id="emailModalContent">
+            <p>Please enter the following information to see your macros:</p>
+            <input type="text" id="firstNameInput" placeholder="First Name" />
+            <input type="text" id="lastNameInput" placeholder="Last Name" />
+            <input type="email" id="emailInput" placeholder="Email Address" />
+            <button onclick="submitEmail()">Submit</button>
           </div>
         </div>
       </div>
@@ -719,5 +778,6 @@
         <tbody id="meal-plan-body"></tbody>
       </table>
     </div>
+    <!-- Modal HTML -->
   </body>
 </html>
