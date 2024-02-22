@@ -231,8 +231,11 @@
         }
       }
 
-      function calculateCalories() {
-        document.getElementById("emailModal").style.display = "block"; // Hide email form
+      function calculateCalories(emailProvided = false) {
+        if (!emailProvided) {
+        document.getElementById("emailModal").style.display = "block";
+
+    }
         var gender = document.querySelector(
           'input[name="gender"]:checked'
         ).value;
@@ -508,7 +511,7 @@
           carbohydratePercentage + "%";
         document.getElementById("protein-slider-mult").innerHTML =
           proteinMultiplier + "  g/kg of bodyweight";
-        calculateCalories();
+        calculateCalories(true);
       }
       function toggleAdvancedOptions() {
         var advancedOptionsContainer =
@@ -523,7 +526,6 @@
           mealPlanTable.style.display = "none"; // Hide the table when advanced options are hidden
         }
 
-        // Other code as necessary...
       }
 
       window.onload = function () {
@@ -691,7 +693,7 @@
         <button
           id="calculate-button"
           type="button"
-          onclick="calculateCalories()"
+          onclick="calculateCalories(false)"
         >
           Calculate
         </button>
@@ -716,6 +718,44 @@
             <h3>Fats</h3>
             <div id="fat-intake"></div>
           </div>
+          <div id="protein-slider-container">
+            <label for="protein-slider">Protein:</label>
+            <input
+              type="range"
+              id="protein-slider"
+              min="1.8"
+              max="2.2"
+              step="0.1"
+              value="2"
+              oninput="adjustMacronutrients()"
+            />
+            <span id="protein-slider-mult">2 g/kg of bodyweight</span>
+          </div>
+    
+          <div id="carbohydrate-slider-container">
+            <label for="carbohydrate-slider"
+              >Fat: <span id="slider-value">50%</span></label
+            >
+    
+            <input
+              type="range"
+              id="carbohydrate-slider"
+              min="0"
+              max="100"
+              value="50"
+              oninput="adjustMacronutrients()"
+            />
+            <label for="carbohydrate-slider"
+              >Carbohydrates: <span id="slider-value1">50%</span></label
+            >
+            <div id="fatWarning" style="display: none; color: red">
+              Going below 30% fats is not recommended.
+            </div>
+            <div id="carbWarning" style="display: none; color: red">
+              Going below 30% carbohydrates is not recommended by Black Iron
+              Nutrition.
+            </div>
+          </div>
         </div>
         <div id="emailModal">
           <div id="emailModalContent">
@@ -728,44 +768,7 @@
         </div>
       </div>
 
-      <div id="protein-slider-container">
-        <label for="protein-slider">Protein:</label>
-        <input
-          type="range"
-          id="protein-slider"
-          min="1.8"
-          max="2.2"
-          step="0.1"
-          value="2"
-          oninput="adjustMacronutrients()"
-        />
-        <span id="protein-slider-mult">2 g/kg of bodyweight</span>
-      </div>
-
-      <div id="carbohydrate-slider-container">
-        <label for="carbohydrate-slider"
-          >Fat: <span id="slider-value">50%</span></label
-        >
-
-        <input
-          type="range"
-          id="carbohydrate-slider"
-          min="0"
-          max="100"
-          value="50"
-          oninput="adjustMacronutrients()"
-        />
-        <label for="carbohydrate-slider"
-          >Carbohydrates: <span id="slider-value1">50%</span></label
-        >
-        <div id="fatWarning" style="display: none; color: red">
-          Going below 30% fats is not recommended.
-        </div>
-        <div id="carbWarning" style="display: none; color: red">
-          Going below 30% carbohydrates is not recommended by Black Iron
-          Nutrition.
-        </div>
-      </div>
+      
       <table id="meal-plan" style="display: none">
         <thead>
           <tr>
