@@ -184,6 +184,7 @@
       var carbohydratePercentage = 50; // Default values, adjust as needed
       var fatPercentage = 50;
       var proteinMultiplier = 2;
+      var emailProvided = false;
       function toggleGoalOptions() {
         var goal = document.getElementById("goal").value;
         var deficitContainer = document.getElementById("deficit-container");
@@ -223,6 +224,7 @@
               // Hide the email modal here and show the results
               document.getElementById("emailModal").style.display = "none";
               document.getElementById("macro-row").style.display = "flex";
+              emailProvided = true;
               displayMacros(); // Assuming this function displays your macro calculations
             })
             .catch((error) => console.error("Error:", error));
@@ -231,7 +233,7 @@
         }
       }
 
-      function calculateCalories(emailProvided = false) {
+      function calculateCalories() {
         if (!emailProvided) {
         document.getElementById("emailModal").style.display = "block";
 
@@ -511,7 +513,7 @@
           carbohydratePercentage + "%";
         document.getElementById("protein-slider-mult").innerHTML =
           proteinMultiplier + "  g/kg of bodyweight";
-        calculateCalories(true);
+        calculateCalories();
       }
       function toggleAdvancedOptions() {
         var advancedOptionsContainer =
@@ -693,7 +695,7 @@
         <button
           id="calculate-button"
           type="button"
-          onclick="calculateCalories(false)"
+          onclick="calculateCalories()"
         >
           Calculate
         </button>
