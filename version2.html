@@ -207,25 +207,28 @@
         var lastName = document.getElementById("lastNameInput").value;
         // Basic validation for email and names
         if (email && /\S+@\S+\.\S+/.test(email) && firstName && lastName) {
-          fetch("https://script.google.com/macros/s/AKfycbwjrG3nRcap6eNoj5oKxRl-hwIapkOfdkw77xPFi2-vS5dl5WdaTKzM2lo9wP9kYTGl/exec", {
-            method: "POST",
-            mode: "no-cors", // Important for CORS policy
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `email=${encodeURIComponent(
-              email
-            )}&firstName=${encodeURIComponent(
-              firstName
-            )}&lastName=${encodeURIComponent(lastName)}`,
-          })
+          document.getElementById("emailModal").style.display = "none";
+          document.getElementById("macro-row").style.display = "flex";
+          fetch(
+            "https://script.google.com/macros/s/AKfycbwjrG3nRcap6eNoj5oKxRl-hwIapkOfdkw77xPFi2-vS5dl5WdaTKzM2lo9wP9kYTGl/exec",
+            {
+              method: "POST",
+              mode: "no-cors", // Important for CORS policy
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: `email=${encodeURIComponent(
+                email
+              )}&firstName=${encodeURIComponent(
+                firstName
+              )}&lastName=${encodeURIComponent(lastName)}`,
+            }
+          )
             .then((response) => {
               console.log("Information saved");
               // Hide the email modal here and show the results
-              document.getElementById("emailModal").style.display = "none";
-              document.getElementById("macro-row").style.display = "flex";
+
               emailProvided = true;
-              displayMacros(); // Assuming this function displays your macro calculations
             })
             .catch((error) => console.error("Error:", error));
         } else {
@@ -235,9 +238,8 @@
 
       function calculateCalories() {
         if (!emailProvided) {
-        document.getElementById("emailModal").style.display = "block";
-
-    }
+          document.getElementById("emailModal").style.display = "block";
+        }
         var gender = document.querySelector(
           'input[name="gender"]:checked'
         ).value;
@@ -527,7 +529,6 @@
           advancedOptionsContainer.style.display = "none";
           mealPlanTable.style.display = "none"; // Hide the table when advanced options are hidden
         }
-
       }
 
       window.onload = function () {
@@ -733,12 +734,12 @@
             />
             <span id="protein-slider-mult">2 g/kg of bodyweight</span>
           </div>
-    
+
           <div id="carbohydrate-slider-container">
             <label for="carbohydrate-slider"
               >Fat: <span id="slider-value">50%</span></label
             >
-    
+
             <input
               type="range"
               id="carbohydrate-slider"
@@ -770,7 +771,7 @@
             <tbody id="meal-plan-body"></tbody>
           </table>
         </div>
-        
+
         <div id="emailModal">
           <div id="emailModalContent">
             <p>Please enter the following information to see your macros:</p>
@@ -781,9 +782,6 @@
           </div>
         </div>
       </div>
-
-      
-      
     </div>
     <!-- Modal HTML -->
   </body>
